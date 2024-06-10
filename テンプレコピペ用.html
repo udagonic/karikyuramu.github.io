@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>kopipe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+        #container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        #curriculum {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>カリキュラムコピー</h1>
+        <div id="curriculum">
+            カリキュラム作成講師:<br>
+            講座数:<br>
+            目的:<br>
+            確認テスト内容:<br>
+            授業時使用教材:<br>
+            宿題時使用教材:<br>
+            授業の進め方:<br>
+            時間が余ったときの対応:<br>
+            時間がたりなさそうなときの対応:<br>
+            備考:<br>
+            No.1「」授業： 　　　　　宿題：<br>
+            No.2「」授業： 　　　　　宿題：<br>
+            No.3「」授業： 　　　　　宿題：<br>
+            No.4「」授業： 　　　　　宿題：<br>
+            No.5「」授業： 　　　　　宿題：<br>
+            No.6「」授業： 　　　　　宿題：<br>
+            No.7「」授業： 　　　　　宿題：<br>
+            No.8「」授業： 　　　　　宿題：<br>
+            No.9「」授業： 　　　　　宿題：<br>
+            No.10「」授業： 　　　　　宿題：<br>
+        </div>
+        <button onclick="copyText()">テキストをコピー</button>
+    </div>
+
+    <script>
+        function copyText() {
+            var curriculumText = document.getElementById("curriculum").innerText;
+            navigator.clipboard.writeText(curriculumText).then(function() {
+                alert("テキストがコピーされました！");
+            }, function(err) {
+                console.error('コピーに失敗しました: ', err);
+            });
+        }
+    </script>
+</body>
+</html>
