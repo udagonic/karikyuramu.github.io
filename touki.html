@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>冬期講習カリキュラムメーカー</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e3f2fd; /* ライトブルー */
+            margin: 0;
+            padding: 0;
+        }
+
+        #container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #ffffff; /* ホワイト */
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        h2 {
+            color: #1976D2; /* ダークブルー */
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #1976D2; /* ダークブルー */
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #1565C0; /* ディープブルー */
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #1565C0; /* ディープブルー */
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: #0D47A1; /* ダークインディゴ */
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #e3f2fd; /* ライトブルー */
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f8f9fa; /* ライトグレー */
+        }
+
+        td.editable {
+            cursor: pointer;
+        }
+
+        td.editable:hover {
+            background-color: #bbdefb; /* パウダーブルー */
+        }
+
+        #result, #formResult {
+            margin-top: 20px;
+            border: 1px solid #e3f2fd; /* ライトブルー */
+            padding: 15px;
+            background-color: #ffffff; /* ホワイト */
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body onbeforeunload="return preventReload();">
+
+<div id="container">
+    <h1 style="color: #1976D2;">FS八戸ノ里教室  （作成者：宇田有佑）</h1>
+    <h2 style="color: #1976D2;">冬期講習カリキュラム作成フォーム</h2>
+
+    <!-- ...（フォームの残りの部分は変更なし）... -->
+    <form id="curriculumForm">
+        <label for="curriculumAuthor">カリキュラム作成講師:</label>
+        <input type="text" id="curriculumAuthor" name="カリキュラム作成講師" required><br>
+
+        <label for="courseCount">講座数:</label>
+        <input type="number" id="courseCount" name="講座数" required><br>
+
+        <label for="objective">目的（提案書から引用か類推。）:</label>
+        <textarea id="objective" name="目的" rows="4" required></textarea><br>
+
+        <label for="testContent">確認テスト内容:</label>
+        <textarea id="testContent" name="確認テスト内容" rows="4" required></textarea><br>
+
+        <label for="teachingMaterial">授業時使用教材(教材名＋印刷の有無):</label>
+        <input type="text" id="teachingMaterial" name="授業時使用教材" required><br>
+
+        <label for="homeworkMaterial">宿題時使用教材(教材名＋印刷の有無):</label>
+        <input type="text" id="homeworkMaterial" name="宿題時使用教材" required><br>
+
+
+        <label for="teachingApproach">授業の進め方:</label>
+        <textarea id="teachingApproach" name="授業の進め方" rows="4" required></textarea><br>
+
+        <label for="extraTime">時間が余ったときの対応:</label>
+        <textarea id="extraTime" name="時間が余ったときの対応" rows="4" required></textarea><br>
+
+        <label for="insufficientTime">時間がたりなさそうなときの対応:</label>
+        <textarea id="insufficientTime" name="時間がたりなさそうなときの対応" rows="4" required></textarea><br>
+
+        <label for="remarks">備考:</label>
+        <textarea id="remarks" name="備考" rows="4"></textarea><br>
+
+        <button type="button" onclick="displayFormResult()">フォーム内容表示</button>
+    </form>
+
+    <!-- 冬らしいボタンの追加 -->
+    <div>
+        <label for="inputNumber" style="color: #1976D2;">授業コマ数（受講講座数×7コマ）:</label>
+        <input type="number" id="inputNumber">
+        <button onclick="addRows()" style="background-color: #1565C0; color: white;">テンプレート呼び出し</button>
+        <button onclick="addRow()" style="background-color: #1565C0; color: white;">一行追加</button>
+        <button onclick="deleteRow()" style="background-color: #c62828; color: white;">一行削除</button>
+        <button onclick="deleteAllRows()" style="background-color: #c62828; color: white;">全削除</button>
+    </div>
+    <table id="editableTable">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>単元名</th>
+                <th>授業範囲</th>
+                <th>宿題範囲</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- ここにテーブルのボディが入ります -->
+        </tbody>
+    </table>
+
+    <button onclick="concatenateAndDisplay()">結合して表示</button>
+    <div id="formResult"></div>
+    <div id="result"></div>
+
+    <!-- ...（コンテンツの残りは変更なし）... -->
+
+</div>
+
+<script>
+    // ...（JavaScriptのコードは変更なし）...
+    // 各編集可能なセルにイベントリスナーを追加
+    var cells = document.querySelectorAll('.editable');
+    cells.forEach(function(cell) {
+        cell.addEventListener('click', function() {
+            editCell(cell);
+        });
+    });
+
+    // セルを編集可能にする関数
+    function editCell(cell) {
+        // ...（省略）...
+        var oldValue = cell.innerHTML.trim();
+        cell.innerHTML = '<input type="text" value="' + oldValue + '">';
+        var inputElement = cell.querySelector('input');
+        inputElement.focus();
+
+        // 編集が終わったらセルを更新するイベントリスナーを追加
+        inputElement.addEventListener('blur', function() {
+            // No.の列は半角英数字のみを受け入れるようにする
+            if (cell.cellIndex === 0) {
+                var newValue = inputElement.value.trim();
+                if (/^[0-9A-Za-z]+$/.test(newValue)) {
+                    cell.innerHTML = newValue;
+                } else {
+                    // 不正な入力の場合は元の値を保持
+                    cell.innerHTML = oldValue;
+                }
+            } else {
+                cell.innerHTML = inputElement.value;
+            }
+        });
+    }
+
+    // リロードを無効にする関数
+    function preventReload() {
+        return "このページを離れると、変更が失われる可能性があります。本当に移動しますか？";
+    }
+
+    // ...（省略）...
+    // 結合して結果を表示する関数
+    function concatenateAndDisplay() {
+        var rows = document.querySelectorAll('#editableTable tbody tr');
+        var result = '';
+
+        rows.forEach(function(row, index) {
+            var cells = row.querySelectorAll('.editable');
+            var No = index + 1; // No.の列を連番として埋める
+            var 単元名 = cells[1].innerHTML;
+            var 授業範囲 = cells[2].innerHTML;
+            var 宿題範囲 = cells[3].innerHTML;
+
+            result += 'No.' + No + '「' + 単元名 + '」' + '授業：' + 授業範囲 + '      宿題：' + 宿題範囲 + '<br>';
+        });
+
+        document.getElementById('result').innerHTML = result;
+    }
+
+    // フォーム内容を表示する関数
+    function displayFormResult() {
+        var formResult = '<h2>作成されたカリキュラム（以下コピーしてMSLに貼り付け）</h2>';
+        var form = document.getElementById('curriculumForm').elements;
+
+        for (var i = 0; i < form.length; i++) {
+            if (form[i].type !== 'button') {
+                formResult += '<strong>' + form[i].name + ':</strong> ' + form[i].value + '<br>';
+            }
+        }
+
+        document.getElementById('formResult').innerHTML = formResult;
+
+        // 結合して結果を表示する
+        concatenateAndDisplay();
+    }
+
+    // ボタンをクリックして行を追加する関数
+    function addRows() {
+        var inputNumber = document.getElementById('inputNumber').value;
+
+        // テーブルに行を追加
+        for (var i = 1; i <= inputNumber; i++) {
+            addRow();
+        }
+    }
+
+    // 一行追加する関数
+    function addRow() {
+        var tbody = document.getElementById('editableTable').querySelector('tbody');
+        var rows = tbody.getElementsByTagName('tr');
+        var newRow = document.createElement('tr');
+        newRow.innerHTML = '<td class="editable" contenteditable="true">' + (rows.length + 1) + '</td>' +
+                           '<td class="editable" contenteditable="true"></td>' +
+                           '<td class="editable" contenteditable="true"></td>' +
+                           '<td class="editable" contenteditable="true"></td>';
+        tbody.appendChild(newRow);
+
+        // 追加された行のセルにイベントリスナーを追加
+        var cells = newRow.querySelectorAll('.editable');
+        cells.forEach(function(cell) {
+            cell.addEventListener('click', function() {
+                editCell(cell);
+            });
+        });
+    }
+
+    // 一行削除する関数
+    function deleteRow() {
+        var tbody = document.getElementById('editableTable').querySelector('tbody');
+        var rows = tbody.getElementsByTagName('tr');
+        if (rows.length > 0) {
+            tbody.removeChild(rows[rows.length - 1]);
+        }
+    }
+
+    // 全行削除する関数
+    function deleteAllRows() {
+        var tbody = document.getElementById('editableTable').querySelector('tbody');
+        tbody.innerHTML = '';
+    }
+
+</script>
+
+</body>
+</html>
